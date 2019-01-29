@@ -28,12 +28,11 @@ public class BotSocket extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         log.debug("onOpen " + handshakedata.getHttpStatusMessage());
-        System.out.println("onOpen");
     }
 
     @Override
     public void onMessage(String message) {
-        log.debug("onMessage " + message);
+        System.out.println(message);
         packetsSubject.onNext(BotUtil.deserializeBotPacket(message));
     }
 

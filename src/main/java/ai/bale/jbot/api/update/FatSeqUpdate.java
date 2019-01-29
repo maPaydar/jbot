@@ -2,25 +2,31 @@ package ai.bale.jbot.api.update;
 
 import ai.bale.jbot.api.BotPacket;
 import ai.bale.jbot.api.entity.User;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = Id.NAME, property = "$type")
 public class FatSeqUpdate extends BotPacket {
 
     @JsonProperty("$type")
-    private String type = "FatSeqUpdate";
+    private String type;
     private int seq;
-
-    private List<User> users;
+    //    private List<User> users;
     //    private List<Map<Integer, Group>> groups;
     private FatSeqUpdateBody body;
 
-    public FatSeqUpdate() {
+    @JsonCreator
+    public FatSeqUpdate(@JsonProperty("$type") String type,
+        @JsonProperty("seq") int seq,
+//        @JsonProperty("users") List<User> users,
+        @JsonProperty("body") FatSeqUpdateBody body) {
+        this.type = type;
+        this.seq = seq;
+//        this.users = users;
+        this.body = body;
     }
 
     public String getType() {
@@ -48,7 +54,7 @@ public class FatSeqUpdate extends BotPacket {
         return "FatSeqUpdate{" +
             "type='" + type + '\'' +
             ", seq=" + seq +
-            ", users=" + users +
+//            ", users=" + users +
             ", body=" + body +
             '}';
     }

@@ -36,4 +36,13 @@ public class Peer {
     public String getAccessHash() {
         return accessHash;
     }
+
+    @Override
+    public String toString() {
+        return "Peer{" +
+            "type='" + type + '\'' +
+            ", id=" + id +
+            ", accessHash='" + accessHash + '\'' +
+            '}';
+    }
 }

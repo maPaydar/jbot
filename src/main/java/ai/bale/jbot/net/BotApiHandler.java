@@ -2,10 +2,10 @@ package ai.bale.jbot.net;
 
 import static ai.bale.jbot.util.BotUtil.stringify;
 
+import ai.bale.jbot.api.entity.Peer;
 import ai.bale.jbot.api.request.Request;
 import ai.bale.jbot.api.request.RequestSendMessage;
-import ai.bale.jbot.api.entity.User;
-import ai.bale.jbot.api.messages.ApiTextMessage;
+import ai.bale.jbot.api.messages.TextMessage;
 import ai.bale.jbot.api.response.Response;
 import ai.bale.jbot.api.update.FatSeqUpdate;
 import ai.bale.jbot.api.update.UpdateMessageBody;
@@ -45,17 +45,13 @@ public class BotApiHandler {
     /**
      * Sends Text message to the current user
      *
-     * @param user The current user
+     * @param peer The current peer
      * @param text The text of message
      */
-    public Observable<Void> sendText(User user, String text) {
+    public Observable<Void> sendText(Peer peer, String text) {
         Request request = new RequestSendMessage(String.valueOf(requestId.addAndGet(1)),
-            BotUtil.generateRandomId(),
-            new ApiTextMessage(text),
-            user, null);
-
+            BotUtil.generateRandomId(), new TextMessage(text), peer, null);
         requestIds.add(request.getId());
-
         return sendRequest(request);
     }
 
@@ -84,4 +80,10 @@ public class BotApiHandler {
     }
 
 
+    public void subscribe(IBotMessage o) {
+        this.getMessages().subscribe(fatSeqUpdate ->
+            o.onReceived(fatSeqUpdate.getBody().getPeer(),
+                ((UpdateMessageBody) fatSeqUpdate.getBody()).getMessage())
+        );
+    }
 }

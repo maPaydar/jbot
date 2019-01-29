@@ -1,13 +1,14 @@
 package ai.bale.jbot.api.update;
 
 import ai.bale.jbot.api.entity.Peer;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = Id.NAME, property = "$type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = UpdateMessageBody.class, name = "Message"),
@@ -22,7 +23,14 @@ public abstract class FatSeqUpdateBody {
     @JsonProperty("peer")
     private Peer peer;
 
-    public FatSeqUpdateBody() {
+    @JsonCreator
+    public FatSeqUpdateBody(@JsonProperty("$type") String type) {
+        this.type = type;
+    }
+
+    public FatSeqUpdateBody(String type, Peer peer) {
+        this.type = type;
+        this.peer = peer;
     }
 
     public String getType() {
